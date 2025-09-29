@@ -5,6 +5,7 @@ import Provider from './providers/providers';
 import Header from './components/UI/header';
 
 import { siteConfig } from '@/config/site.config';
+import { layoutConfig } from '@/config/layout.config';
 
 import './globals.css';
 
@@ -29,13 +30,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Provider>
           <Header />
-          {children}
+          <main
+            className={`flex flex-col w-full justify-start items-center`}
+            style={{
+              height: `calc(100vh - ${layoutConfig.headerHeight} - ${layoutConfig.footerHeight})`,
+            }}
+          >
+            {children}
+          </main>
+          <footer
+            className={`flex justify-center items-center `}
+            style={{ height: `${layoutConfig.footerHeight}` }}
+          >
+            {siteConfig.description}
+          </footer>
         </Provider>
       </body>
     </html>

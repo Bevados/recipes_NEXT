@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { siteConfig } from '@/config/site.config';
+import { layoutConfig } from '@/config/layout.config';
 
 import {
   Navbar,
@@ -49,7 +50,7 @@ export default function Header() {
   };
 
   return (
-    <Navbar>
+    <Navbar style={{ height: `${layoutConfig.headerHeight}` }}>
       <NavbarBrand>
         <Link href="/" className="flex gap-1">
           <Logo />
@@ -71,7 +72,6 @@ export default function Header() {
           </Button>
         </NavbarItem>
       </NavbarContent>
-
     </Navbar>
   );
 }
