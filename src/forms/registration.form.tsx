@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, Form, Input } from '@heroui/react';
 
 import React, { useState } from 'react';

@@ -1,5 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,6 +15,8 @@ import {
   NavbarItem,
   Button,
 } from '@heroui/react';
+import RegistrationModal from '../modals/registration.modal';
+import LoginModal from '../modals/login.modal';
 
 export const Logo = () => {
   return (
@@ -28,6 +31,9 @@ export const Logo = () => {
 };
 
 export default function Header() {
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState<boolean>(false);
+  const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
+
   const pathName = usePathname();
 
   const getNavItems = () => {
@@ -64,14 +70,34 @@ export default function Header() {
 
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Логин</Link>
+          <Button
+            as={Link}
+            color="secondary"
+            variant="flat"
+            href="#"
+            onPress={() => setIsLoginOpen(true)}
+          >
+            Логин
+          </Button>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
+          <Button
+            as={Link}
+            color="primary"
+            variant="flat"
+            href="#"
+            onPress={() => setIsRegistrationOpen(true)}
+          >
             Регистрация
           </Button>
         </NavbarItem>
       </NavbarContent>
+
+      <RegistrationModal
+        isOpen={isRegistrationOpen}
+        onClose={() => setIsRegistrationOpen(false)}
+      />
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </Navbar>
   );
 }
