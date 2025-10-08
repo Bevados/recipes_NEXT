@@ -20,7 +20,7 @@ const LoginForm = ({ onClose }: IProps) => {
 
     console.log('Form submitted:', formData);
     onClose();
-  }
+}
 
   return (
     <Form className="w-full" onSubmit={handleSubmit}>

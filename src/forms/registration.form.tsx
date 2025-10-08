@@ -1,14 +1,18 @@
 'use client';
 
-import { Button, Form, Input } from '@heroui/react';
-
 import React, { useState } from 'react';
 
-interface IProps {onClose: () => void;}
+import { Button, Form, Input } from '@heroui/react';
 
+import { IFormData } from '@/types/form-data';
+import { registerUser } from '@/actions/register';
 
-const RegistrationForm = ({onClose}: IProps) => {
-  const [formData, setFormData] = useState({
+interface IProps {
+  onClose: () => void;
+}
+
+const RegistrationForm = ({ onClose }: IProps) => {
+  const [formData, setFormData] = useState<IFormData>({
     email: '',
     password: '',
     confirmPassword: '',
@@ -22,7 +26,9 @@ const RegistrationForm = ({onClose}: IProps) => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    console.log('Form submitted:', formData);
+    const register = await registerUser(formData);
+    console.log('Form submitted:', register);
+
     onClose();
   }
 
@@ -85,10 +91,14 @@ const RegistrationForm = ({onClose}: IProps) => {
         }}
       />
 
-			<div className='flex w-[100%] gap-4 items-center pt-8 justify-end'>
-				<Button variant='light' onPress={onClose}>Отмена</Button>
-				<Button color='primary' type="submit">Зарегистрироваться</Button>
-			</div>
+      <div className="flex w-[100%] gap-4 items-center pt-8 justify-end">
+        <Button variant="light" onPress={onClose}>
+          Отмена
+        </Button>
+        <Button color="primary" type="submit">
+          Зарегистрироваться
+        </Button>
+      </div>
     </Form>
   );
 };
