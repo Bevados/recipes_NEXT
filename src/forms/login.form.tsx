@@ -1,7 +1,7 @@
 'use client';
 
+import { signInWithCredentials } from '@/actions/sign-in';
 import { Button, Form, Input } from '@heroui/react';
-
 import React, { useState } from 'react';
 
 interface IProps {
@@ -19,8 +19,25 @@ const LoginForm = ({ onClose }: IProps) => {
     e.preventDefault();
 
     console.log('Form submitted:', formData);
+
+      try {
+      const res = await signInWithCredentials(formData.email, formData.password);
+      console.log('result', res);
+
+      if (res?.error) {
+        // Обработка ошибки авторизации
+        console.error('Auth error:', res.error);
+        return;
+      }
+
+      onClose();
+    } catch (error) {
+      console.error('Login error:', error);
+    }
+
+
     onClose();
-}
+  }
 
   return (
     <Form className="w-full" onSubmit={handleSubmit}>

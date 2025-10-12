@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.0",
     "@heroui/form": "^2.1.26",
     "@heroui/input": "^2.4.27",
     "@heroui/modal": "^2.2.23",
@@ -17,10 +18,13 @@
     "@heroui/theme": "^2.4.22",
     "@prisma/client": "^6.16.3",
     "@prisma/extension-accelerate": "^2.0.2",
+    "bcryptjs": "^3.0.2",
     "framer-motion": "^12.23.22",
     "next": "15.4.6",
+    "next-auth": "^5.0.0-beta.29",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

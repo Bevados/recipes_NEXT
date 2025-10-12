@@ -17,6 +17,7 @@ import {
 } from '@heroui/react';
 import RegistrationModal from '../modals/registration.modal';
 import LoginModal from '../modals/login.modal';
+import { signOutFunc } from '@/actions/sign-out';
 
 export const Logo = () => {
   return (
@@ -33,6 +34,10 @@ export const Logo = () => {
 export default function Header() {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState<boolean>(false);
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
+
+  const handleSignOut = async () => {
+    await signOutFunc();
+  }
 
   const pathName = usePathname();
 
@@ -69,6 +74,17 @@ export default function Header() {
       </NavbarContent>
 
       <NavbarContent justify="end">
+        <NavbarItem className="hidden lg:flex">
+          <Button
+            as={Link}
+            color="secondary"
+            variant="flat"
+            href="#"
+            onPress={handleSignOut}
+          >
+            Выйти
+          </Button>
+        </NavbarItem>
         <NavbarItem className="hidden lg:flex">
           <Button
             as={Link}

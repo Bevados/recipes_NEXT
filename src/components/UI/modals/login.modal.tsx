@@ -1,6 +1,6 @@
 'use client';
 
-import CustomModal from '../common/modal';
+import CustomModal from '../../common/modal';
 import LoginForm from '@/forms/login.form';
 
 interface IProps {
@@ -8,7 +8,7 @@ interface IProps {
   onClose: () => void;
 }
 
-const LoginModal = ({isOpen, onClose}: IProps) => {
+const LoginModal = ({ isOpen, onClose }: IProps) => {
   return (
     <CustomModal isOpen={isOpen} onClose={onClose} title="Авторизация">
       <LoginForm onClose={onClose} />
