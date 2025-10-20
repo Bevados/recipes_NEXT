@@ -18,6 +18,7 @@ import {
 import RegistrationModal from '../modals/registration.modal';
 import LoginModal from '../modals/login.modal';
 import { signOutFunc } from '@/actions/sign-out';
+import { useAuthStore } from '@/store/auth.store';
 
 export const Logo = () => {
   return (
@@ -32,14 +33,22 @@ export const Logo = () => {
 };
 
 export default function Header() {
+  const pathName = usePathname();
+
+  const { isAuth, status, session, setAuthState } = useAuthStore();
+
   const [isRegistrationOpen, setIsRegistrationOpen] = useState<boolean>(false);
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
 
   const handleSignOut = async () => {
-    await signOutFunc();
-  }
+    try {
+      await signOutFunc();
+    } catch (error) {
+      console.log('Error signing out:', error);
+    }
 
-  const pathName = usePathname();
+    setAuthState('unauthenticated', null);
+  };
 
   const getNavItems = () => {
     return siteConfig.navItems.map((item) => {
@@ -74,39 +83,45 @@ export default function Header() {
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Button
-            as={Link}
-            color="secondary"
-            variant="flat"
-            href="#"
-            onPress={handleSignOut}
-          >
-            Выйти
-          </Button>
-        </NavbarItem>
-        <NavbarItem className="hidden lg:flex">
-          <Button
-            as={Link}
-            color="secondary"
-            variant="flat"
-            href="#"
-            onPress={() => setIsLoginOpen(true)}
-          >
-            Логин
-          </Button>
-        </NavbarItem>
-        <NavbarItem>
-          <Button
-            as={Link}
-            color="primary"
-            variant="flat"
-            href="#"
-            onPress={() => setIsRegistrationOpen(true)}
-          >
-            Регистрация
-          </Button>
-        </NavbarItem>
+        {isAuth && <p>Привет {session?.user?.email}</p>}
+        {!isAuth ? (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <Button
+                as={Link}
+                color="secondary"
+                variant="flat"
+                href="#"
+                onPress={() => setIsLoginOpen(true)}
+              >
+                Логин
+              </Button>
+            </NavbarItem>
+            <NavbarItem>
+              <Button
+                as={Link}
+                color="primary"
+                variant="flat"
+                href="#"
+                onPress={() => setIsRegistrationOpen(true)}
+              >
+                Регистрация
+              </Button>
+            </NavbarItem>
+          </>
+        ) : (
+          <NavbarItem className="hidden lg:flex">
+            <Button
+              as={Link}
+              color="secondary"
+              variant="flat"
+              href="#"
+              onPress={handleSignOut}
+            >
+              Выйти
+            </Button>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
       <RegistrationModal

@@ -20,8 +20,11 @@ const LoginForm = ({ onClose }: IProps) => {
 
     console.log('Form submitted:', formData);
 
-      try {
-      const res = await signInWithCredentials(formData.email, formData.password);
+    try {
+      const res = await signInWithCredentials(
+        formData.email,
+        formData.password
+      );
       console.log('result', res);
 
       if (res?.error) {
@@ -34,7 +37,6 @@ const LoginForm = ({ onClose }: IProps) => {
     } catch (error) {
       console.error('Login error:', error);
     }
-
 
     onClose();
   }
