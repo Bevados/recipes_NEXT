@@ -37,6 +37,10 @@ export default function Header() {
 
   const { isAuth, status, session, setAuthState } = useAuthStore();
 
+  console.log(status);
+  console.log(isAuth);
+  console.log(session);
+
   const [isRegistrationOpen, setIsRegistrationOpen] = useState<boolean>(false);
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
 
@@ -84,7 +88,9 @@ export default function Header() {
 
       <NavbarContent justify="end">
         {isAuth && <p>Привет {session?.user?.email}</p>}
-        {!isAuth ? (
+        {status === 'loading' ? (
+          <p>Загрузка...</p>
+        ) : !isAuth ? (
           <>
             <NavbarItem className="hidden lg:flex">
               <Button

@@ -17,26 +17,11 @@ const LoginForm = ({ onClose }: IProps) => {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    console.log('Form Submited:', formData);
 
-    console.log('Form submitted:', formData);
+    await signInWithCredentials(formData.email, formData.password);
 
-    try {
-      const res = await signInWithCredentials(
-        formData.email,
-        formData.password
-      );
-      console.log('result', res);
-
-      if (res?.error) {
-        // Обработка ошибки авторизации
-        console.error('Auth error:', res.error);
-        return;
-      }
-
-      onClose();
-    } catch (error) {
-      console.error('Login error:', error);
-    }
+    window.location.reload();
 
     onClose();
   }
