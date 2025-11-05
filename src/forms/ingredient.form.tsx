@@ -1,25 +1,42 @@
 'use client';
 
 import { CATEGORY_OPTIONS, UNIT_OPTIONS } from '@/constants/select-optuions';
+import { useIngredientStore } from '@/store/ingredient.store';
 import { Button, Form, Input, Select, SelectItem } from '@heroui/react';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
+
+const initialState = {
+  name: '',
+  category: '',
+  unit: '',
+  pricePerUnit: null as number | null,
+  description: '',
+};
 
 const IngredientForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    category: '',
-    unit: '',
-    pricePerUnit: null as number | null,
-    description: '',
-  });
+  const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState(initialState);
+  const { addIngredient } = useIngredientStore();
+  const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
+  const handleSubmit = async (formData: FormData) => {
+    startTransition(async () => {
+      await addIngredient(formData);
+      const storeError = useIngredientStore.getState().error;
+
+      if (storeError) {
+        setError(storeError);
+      } else {
+        setError(null);
+        setFormData(initialState);
+      }
+    });
   };
 
   return (
-    <Form className="width-[400px]" onSubmit={handleSubmit}>
+    <Form className="w-full" action={handleSubmit}>
+      {error && <p className="mb-4 text-red-500">{error}</p>}
+
       <Input
         isRequired
         name="name"
@@ -41,7 +58,7 @@ const IngredientForm = () => {
         <div className="w-1/3">
           <Select
             isRequired
-            name="cate4gory"
+            name="category"
             placeholder="Категория"
             selectedKeys={formData.category ? [formData.category] : []}
             classNames={{
@@ -131,7 +148,7 @@ const IngredientForm = () => {
         }
       />
       <div className="flex w-full items-center justify-end">
-        <Button color="primary" type="submit">
+        <Button color="primary" type="submit" isLoading={isPending}>
           Добавить ингредиент
         </Button>
       </div>
