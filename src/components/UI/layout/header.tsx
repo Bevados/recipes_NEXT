@@ -37,10 +37,6 @@ export default function Header() {
 
   const { isAuth, status, session, setAuthState } = useAuthStore();
 
-  console.log(status);
-  console.log(isAuth);
-  console.log(session);
-
   const [isRegistrationOpen, setIsRegistrationOpen] = useState<boolean>(false);
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
 
