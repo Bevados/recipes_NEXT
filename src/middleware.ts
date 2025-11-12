@@ -1,23 +1,31 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { getToken, GetTokenParams } from 'next-auth/jwt';
 
 export async function middleware(request: NextRequest) {
-  // Массив путей
   const { pathname } = request.nextUrl;
 
-  // Функция, извещающая и валидирующая jwt токен доступа из cookie. А также ключ секрета для подписи токена
-  const token = await getToken({
+  let params: GetTokenParams = {
     req: request,
-    secret: process.env.AUTH_SECRET,
-  });
+    secret: process.env.AUTH_SECRET ?? 'secret',
+  };
 
-  // Массив защищенных роутов, то есть роуты для которых нужна авторизация
-  const protectedRoutes = ['/ingredients'];
+  if (process.env.NODE_ENV === 'production') {
+    params = {
+      ...params,
+      cookieName: '__Secure-authjs.session-token',
+    };
+  }
 
-  // Проверка, начинается ли путь, куда идет пользователь с одного из защищенных роутов.
-  // Если да, проверяем наличие токена, то есть авторизации.
-  // Если авторизации нет, редиректим на страницу ошибки.
-  if (protectedRoutes.some((route) => pathname.startsWith(route))) {
+  const token = await getToken(params);
+
+  const protectedRoutes = ['/ingredients', '/recipes/new', '/recipes/:path*'];
+
+  if (
+    protectedRoutes.some((route) =>
+      pathname.startsWith(route.replace(':path*', ''))
+    )
+  ) {
     if (!token) {
       const url = new URL('/error', request.url);
       url.searchParams.set('message', 'Недостаточно прав');
@@ -25,11 +33,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Если токен есть, пропускаем дальше
   return NextResponse.next();
 }
 
-// Определяем config для middleware. matcher указывает на пути, где будет срабатывать middleware
 export const config = {
-  matcher: ['/ingredients'],
+  matcher: ['/ingredients', '/recipes/new', '/recipes/:path*'],
 };

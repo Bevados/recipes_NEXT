@@ -1,6 +1,6 @@
+'use server';
+
 import prisma from '@/utils/prisma';
-import { form } from '@heroui/react';
-import { ca } from 'zod/v4/locales';
 
 export async function getRecipes() {
   try {
@@ -16,8 +16,8 @@ export async function getRecipes() {
 
     return { success: true, recipes };
   } catch (error) {
-    console.error('Ошибка получения рецептов:', error);
-    return { success: false, error: 'Ошибка получения рецептов' };
+    console.error('Error fetching recipes:', error);
+    return { success: false, error: 'Ошибка при загрузке рецептов' };
   }
 }
 
@@ -37,7 +37,10 @@ export async function createRecipe(formData: FormData) {
       }));
 
     if (!name || ingredients.length === 0) {
-      return { success: false, error: 'Название и ингредиенты обязательны' };
+      return {
+        success: false,
+        error: 'Имя и хотя бы один ингредиент обязательны',
+      };
     }
 
     const recipe = await prisma.recipe.create({
@@ -60,10 +63,11 @@ export async function createRecipe(formData: FormData) {
         },
       },
     });
+
     return { success: true, recipe };
   } catch (error) {
-    console.error('Ошибка создания рецепта:', error);
-    return { success: false, error: 'Ошибка создания рецепта' };
+    console.error('Error creating recipe:', error);
+    return { success: false, error: 'Ошибка при создании рецепта' };
   }
 }
 
@@ -72,7 +76,6 @@ export async function updateRecipe(id: string, formData: FormData) {
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const imageUrl = formData.get('imageUrl') as string | null;
-
     const ingredients = Array.from(formData.entries())
       .filter(([key]) => key.startsWith('ingredient_'))
       .map(([key, value]) => ({
@@ -83,8 +86,12 @@ export async function updateRecipe(id: string, formData: FormData) {
       }));
 
     if (!name || ingredients.length === 0) {
-      return { success: false, error: 'Название и ингредиенты обязательны' };
+      return {
+        success: false,
+        error: 'Имя и хотя бы один ингредиент обязательны',
+      };
     }
+
     const recipe = await prisma.recipe.update({
       where: { id },
       data: {
@@ -110,7 +117,7 @@ export async function updateRecipe(id: string, formData: FormData) {
 
     return { success: true, recipe };
   } catch (error) {
-    console.error('Ошибка обновления рецепта:', error);
+    console.error('Error updating recipe:', error);
     return { success: false, error: 'Ошибка при обновлении рецепта' };
   }
 }
@@ -127,7 +134,7 @@ export async function deleteRecipe(id: string) {
 
     return { success: true };
   } catch (error) {
-    console.error('Ошибка удаления рецепта:', error);
+    console.error('Error deleting recipe:', error);
     return { success: false, error: 'Ошибка при удалении рецепта' };
   }
 }

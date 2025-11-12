@@ -1,6 +1,6 @@
 'use client';
 
-import { CATEGORY_OPTIONS, UNIT_OPTIONS } from '@/constants/select-optuions';
+import { CATEGORY_OPTIONS, UNIT_OPTIONS } from '@/constants/select-options';
 import { useIngredientStore } from '@/store/ingredient.store';
 import { Button, Form, Input, Select, SelectItem } from '@heroui/react';
 import { useState, useTransition } from 'react';

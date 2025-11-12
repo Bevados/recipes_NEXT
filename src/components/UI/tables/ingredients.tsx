@@ -1,6 +1,6 @@
 'use client';
 
-import { CATEGORY_OPTIONS, UNIT_OPTIONS } from '@/constants/select-optuions';
+import { CATEGORY_OPTIONS, UNIT_OPTIONS } from '@/constants/select-options';
 import { useAuthStore } from '@/store/auth.store';
 import { useIngredientStore } from '@/store/ingredient.store';
 import {
@@ -31,9 +31,9 @@ const IngredientsTable = () => {
     await removeIngredient(id);
   };
 
-	if (!isAuth) {
-		return <p className="mt-4">Пожалуйста авторезируйтесь.</p>;
-	}
+  if (!isAuth) {
+    return <p className="mt-4">Пожалуйста авторезируйтесь.</p>;
+  }
 
   return !isLoading && isAuth ? (
     <Table
@@ -72,7 +72,9 @@ const IngredientsTable = () => {
                 onPress={() => {
                   handleDelete(ingredient.id);
                 }}
-              >Удалить</Button>
+              >
+                Удалить
+              </Button>
             </TableCell>
           </TableRow>
         ))}
